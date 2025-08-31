@@ -1,15 +1,18 @@
-import express, { Request, Response } from "express";
+import express from "express";
+import dotenv from "dotenv";
+import router from "./routes/notificationRoutes";
+import { connectDatabase } from "./config/database";
+
+dotenv.config();
 
 const app = express();
 
 app.use(express.json());
 
-app.get("/teste", async ( req: Request, res: Response )  => {
-    res.send("Hello world");
-})
+app.use("/api", router);
 
 const PORT = 3000;
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+connectDatabase().then(() => {
+  app.listen(PORT, () => console.log(`🚀 Server rodando na porta ${PORT}`));
 });
