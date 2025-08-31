@@ -27,3 +27,8 @@ export const validNotification = async (
   const status = requiresAdditionalInformation ? "Validação" : "Concluído";
   return await notificationModel.findByIdAndUpdate(id, { status }, { new: true })
 };
+
+export const getAllNotifications = async (): Promise<INotification[]> => {
+  console.log("Fetching all notifications from the database");
+  return await notificationModel.find();
+}

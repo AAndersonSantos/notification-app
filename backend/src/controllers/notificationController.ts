@@ -41,3 +41,13 @@ export const validNotification = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Erro ao validar notificação" });
   }
 };
+
+export const getAllNotifications = async (req: Request, res: Response) => {
+  try {
+    console.log("Fetching all notifications from the database");
+    const notifications = await notificationService.getAllNotifications();
+    res.json(notifications);
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao buscar notificações", error });
+  }
+};
