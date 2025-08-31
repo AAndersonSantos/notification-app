@@ -5,8 +5,7 @@ export const createNotification = async (data: {
   descricao: string;
   dataAudiencia: Date;
 }): Promise<INotification> => {
-  const notification = await notificationModel.create(data);
-  return notification;
+  return await notificationModel.create(data);
 };
 
 export const updateInfoNotification = async (
@@ -19,4 +18,12 @@ export const updateInfoNotification = async (
   }
 ): Promise<INotification | null> => {
   return await notificationModel.findByIdAndUpdate(id, { ...data, status: "Validação" },{ new: true });
+};
+
+export const validNotification = async (
+  id: string,
+  requiresAdditionalInformation: boolean
+): Promise<INotification | null> => {
+  const status = requiresAdditionalInformation ? "Validação" : "Concluído";
+  return await notificationModel.findByIdAndUpdate(id, { status }, { new: true })
 };
