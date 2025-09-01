@@ -103,6 +103,10 @@ Caso **não**, o fluxo é concluído e o status final da notificação passa a s
    ```bash
    http://localhost:3000
    ```
+6. (Opcional) pra visualizar os logs:
+   ```bash
+   docker logs -f backend-notifications
+   ```
 ⚡ Agora o backend estará rodando em um container Node.js, conectado ao MongoDB também containerizado.
 
 ## `💻 Instruções para iniciar o frontend`
