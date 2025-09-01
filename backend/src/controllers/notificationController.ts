@@ -29,9 +29,9 @@ export const updateInfoNotification = async (req: Request, res: Response) => {
 export const validNotification = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { requiresAdditionalInformation } = req.body;
+    const { validateNotification } = req.body;
     
-    const notification = await notificationService.validNotification(id, requiresAdditionalInformation);
+    const notification = await notificationService.validNotification(id, validateNotification);
     if (!notification) {
       return res.status(404).json({ error: "Notificação não encontrada" });
     }
