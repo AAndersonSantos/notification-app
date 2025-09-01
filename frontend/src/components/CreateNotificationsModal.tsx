@@ -2,20 +2,26 @@ import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { createNotification } from "../api/notificationApi";
 
-export default function CreateNotificationsModal() {
+interface Props {
+  onCreated: () => void;
+}
+
+export default function CreateNotificationsModal({ onCreated }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
   const [dataAudiencia, setDataAudiencia] = useState("");
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
-      const newNotification = await createNotification({
+      await createNotification({
         titulo,
         descricao,
         dataAudiencia,
       });
-      console.log("Notificação criada:", newNotification);
+
+      onCreated();
 
       setTitulo("");
       setDescricao("");
