@@ -1,22 +1,68 @@
 import { useEffect, useState } from "react";
 import type { INotification } from "../types/notification";
-import { getNotifications } from "../api/notificationApi";
-import { Link } from "react-router-dom";
+import { getNotifications, getNotificationById } from "../api/notificationApi";
 import { FaEdit, FaHourglass, FaCheck, FaExclamation } from "react-icons/fa";
 import CreateNotificationsModal from "../components/CreateNotificationsModal";
+import UpdateNotificationsModal from "../components/UpdateNotificationsModal";
+import ValidateNotificationsModal from "../components/ValidateNotificationsModal";
 
 export const NotificationList = () => {
   const [notifications, setNotifications] = useState<INotification[]>([]);
+  const [selectedNotification, setSelectedNotification] = useState<INotification | null>(null);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isValidateOpen, setIsValidateOpen] = useState(false);
 
   useEffect(() => {
     getNotifications().then((data) => {
+      fetchNotifications();
       setNotifications(data);
     });
   }, []);
+
+  const fetchNotifications = async () => {
+    const data = await getNotifications();
+    setNotifications(data);
+  };
+
+  const handleEditClick = async (id: string) => {
+    try {
+      const notification = await getNotificationById(id);
+      setSelectedNotification(notification);
+      setIsEditOpen(true);
+    } catch (error) {
+      console.error("Erro ao buscar notificação:", error);
+    }
+  };
+
+  const handleValidateClick = async (id: string) => {
+    try {
+      const notification = await getNotificationById(id);
+      setSelectedNotification(notification);
+      setIsValidateOpen(true);
+    } catch (error) {
+      console.error("Erro ao buscar notificação:", error);
+    }
+  };
   
   return (
     <div className="p-4 overflow-x-auto">
-      <CreateNotificationsModal />
+      {isValidateOpen && selectedNotification && (
+        <ValidateNotificationsModal
+          notification={selectedNotification}
+          isOpen={isValidateOpen}
+          onClose={() => setIsValidateOpen(false)}
+          onValidated={fetchNotifications}
+        />
+      )}
+      {isEditOpen && selectedNotification && (
+        <UpdateNotificationsModal
+          notification={selectedNotification}
+          isOpen={isEditOpen}
+          onClose={() => setIsEditOpen(false)}
+          onUpdated={fetchNotifications}
+        />
+      )}
+      <CreateNotificationsModal onCreated={fetchNotifications}/>
       <table className="min-w-full border-separate border-spacing-1 border border-gray-200 shadow-sm rounded-lg">
         <thead className="bg-gray-300">
           <tr>
@@ -61,10 +107,10 @@ export const NotificationList = () => {
                 <div
                   className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-white text-sm font-semibold ${
                     n.status === "Em Andamento"
-                      ? "bg-blue-500"
+                      ? "bg-gray-500"
                       : n.status === "Validação"
-                      ? "bg-yellow-500"
-                      : "bg-green-500"
+                      ? "bg-orange-500"
+                      : "bg-green-600"
                   }`}
                 >
                   {n.status === "Em Andamento" && <FaHourglass className="mr-1" />}
@@ -74,12 +120,25 @@ export const NotificationList = () => {
                 </div>
               </td>
               <td className="px-4 py-2 text-center">
-                <Link 
-                  to={`/info/${n._id}`}
-                    className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-yellow-300 rounded-md shadow">
-                    <FaEdit className="mr-2" />
-                    Editar
-                </Link>
+                 {n.status === "Em Andamento" && (
+                <button
+                  onClick={() => handleEditClick(n._id)}
+                  className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-yellow-300 rounded-md shadow hover:bg-yellow-400 cursor-pointer"
+                >
+                  <FaEdit className="mr-2" />
+                  Editar
+                </button>
+              )}
+
+              {n.status === "Validação" && (
+                <button
+                  onClick={() => handleValidateClick(n._id)}
+                  className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-green-600 rounded-md shadow hover:bg-green-600 cursor-pointer"
+                >
+                  <FaCheck className="mr-2" />
+                  Validar
+                </button>
+              )}
               </td>
             </tr>
           ))}
