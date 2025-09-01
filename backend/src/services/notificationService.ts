@@ -32,3 +32,7 @@ export const getAllNotifications = async (): Promise<INotification[]> => {
   console.log("Fetching all notifications from the database");
   return await notificationModel.find();
 }
+
+export const getNotificationById = async (id: string): Promise<INotification | null> => {
+  return await notificationModel.findById(id);
+}

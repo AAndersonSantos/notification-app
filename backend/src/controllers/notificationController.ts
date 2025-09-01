@@ -51,3 +51,16 @@ export const getAllNotifications = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Erro ao buscar notificações", error });
   }
 };
+
+export const getNotificationById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const notification = await notificationService.getNotificationById(id);
+    if (!notification) {
+      return res.status(404).json({ message: "Notificação não encontrada" });
+    }
+    res.json(notification);
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao buscar notificação", error });
+  }
+}
