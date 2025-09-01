@@ -11,3 +11,17 @@ export interface INotification {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface UpdateNotificationModalProps {
+  notification: INotification;
+  isOpen: boolean;
+  onClose: () => void;
+  onUpdated: () => void;
+}
+
+export interface ValidateNotificationsModalProps {
+  notification: INotification;
+  isOpen: boolean;
+  onClose: () => void;
+  onValidated: () => void;
+}

@@ -1,15 +1,8 @@
 import { useState } from "react";
-import type { INotification } from "../types/notification";
+import type { UpdateNotificationModalProps } from "../types/notification";
 import { updateInfoNotification } from "../api/notificationApi";
 
-interface Props {
-  notification: INotification;
-  isOpen: boolean;
-  onClose: () => void;
-  onUpdated: () => void;
-}
-
-export default function UpdateNotificationModal({ notification, isOpen, onClose, onUpdated, }: Props) {
+export default function UpdateNotificationModal({ notification, isOpen, onClose, onUpdated, }: UpdateNotificationModalProps) {
   const [titulo, setTitulo] = useState(notification.titulo);
   const [descricao, setDescricao] = useState(notification.descricao);
   const [dataAudiencia, setDataAudiencia] = useState(notification.dataAudiencia);

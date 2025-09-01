@@ -1,15 +1,8 @@
 import { useState } from "react";
-import type { INotification } from "../types/notification";
 import { validNotification } from "../api/notificationApi";
+import type { ValidateNotificationsModalProps } from "../types/notification";
 
-interface Props {
-  notification: INotification;
-  isOpen: boolean;
-  onClose: () => void;
-  onValidated: () => void;
-}
-
-export default function ValidateNotificationsModal({ notification, isOpen, onClose, onValidated }: Props) {
+export default function ValidateNotificationsModal({ notification, isOpen, onClose, onValidated }: ValidateNotificationsModalProps) {
   const [titulo, setTitulo] = useState(notification.titulo);
   const [descricao, setDescricao] = useState(notification.descricao);
   const [dataAudiencia, setDataAudiencia] = useState(notification.dataAudiencia);
