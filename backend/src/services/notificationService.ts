@@ -11,6 +11,9 @@ export const createNotification = async (data: {
 export const updateInfoNotification = async (
   id: string,
   data: {
+    titulo: string;
+    descricao: string;
+    dataAudiencia: Date;
     nome: string;
     email: string;
     telefone: string;
@@ -22,9 +25,10 @@ export const updateInfoNotification = async (
 
 export const validNotification = async (
   id: string,
-  requiresAdditionalInformation: boolean
+  validateNotification: boolean
 ): Promise<INotification | null> => {
-  const status = requiresAdditionalInformation ? "Validação" : "Concluído";
+  console.log("Validating notification with ID:", id, "Validation result:", validateNotification);
+  const status = validateNotification ? "Concluído" : "Em Andamento";
   return await notificationModel.findByIdAndUpdate(id, { status }, { new: true })
 };
 
